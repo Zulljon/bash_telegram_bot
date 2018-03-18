@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# leds on/off
+#	gpio mode 2 out
+# 	gpio write 2 1
+
+LED1=2
+LED2=3
+LED3=12
+LED4=13
+LED5=14
+ON=1
+OFF=0
+
+function init_leds(){
+	gpio mode $LED1 out
+	gpio mode $LED2 out
+	gpio mode $LED3 out
+	gpio mode $LED4 out
+	gpio mode $LED5 out
+}	
+
+#USAGE: blink $LED5 &
+function blink_led(){
+	gpio write $1 $ON > /dev/null 2>&1
+	sleep 0.09
+	gpio write $1 $OFF > /dev/null 2>&1
+	exit 0
+}
+
+function trig_led(){
+	[[ $(gpio read $1) -eq 1 ]] && STAT=0 || STAT=1
+	gpio write $1 $STAT > /dev/null 2>&1
+}
