@@ -1,11 +1,11 @@
 # Telegram bot writen on bash
 Work well on my OrangePi ZERO
 ## Function:
-> /exec - execute command in /bin/bash, and get its result
-> /espeak - get voice message of text (only english)
-> /speakru - get voice message of text on russian
-> /sayru - say in speakers on russian
-> echo
+###### /exec - execute command in /bin/bash, and get its result
+###### /espeak - get voice message of text (only english)
+###### /speakru - get voice message of text on russian
+###### /sayru - say in speakers on russian
+###### echo
 
 ## Usage
 1. Create your bot and get his `token`
