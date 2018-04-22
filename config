@@ -29,3 +29,12 @@ else
 	CMD_FLAG="${TEMP_DIR}/cmd_flag_d.txt"
 	CMD_ARGS="${TEMP_DIR}/cmd_args_d.txt"
 fi
+
+if [[ -e $RAM_JSON ]]; then
+	mkdir -p $TEMP_DIR
+	touch $RAM_JSON
+	touch $CMD_FLAG
+	touch $CMD_ARGS
+	touch $SIG_to_DIE
+fi
+
