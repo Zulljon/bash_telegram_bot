@@ -5,35 +5,7 @@
 #speakru - get voice message of text on russian (use festvox-ru from linux repo)
 #sayru - say in speakers on russian 
 
-DEBUG=false
-CURL_ARGS="-s" # default "-s"
-
-TOKEN="$(cat bot_token.txt)"
-URL="https://api.telegram.org/bot${TOKEN}"
-LMidFILE="last_message_id.txt"
-DEST=/mnt/hard_drive1/zopiBot_trash
-
-if ! $DEBUG ; then
-	TEMP_DIR=/run/user/$(id -u)/telegram_bot
-	RAM_JSON=$TEMP_DIR/answer.json
-	CMD_FLAG=$TEMP_DIR/cmd_flag.txt
-	CMD_ARGS=$TEMP_DIR/cmd_args.txt
-	mkdir -p $TEMP_DIR
-	[[ -e $RAM_JSON ]] && touch $RAM_JSON ; echo "" > $RAM_JSON
-	[[ -e $CMD_FLAG ]] && touch $CMD_FLAG ; echo "" > $CMD_FLAG
-	[[ -e $CMD_ARGS ]] && touch $CMD_ARGS
-	#TEMP_DIR=$(mktemp -dt "tBot.XXXXXXXX" --tmpdir=/run/user/$(id -u))
-	#RAM_JSON=$(mktemp -t "json.XXXXXXXX" --tmpdir=$TEMP_DIR)
-	#CMD_FLAG=$(mktemp -t "cmd_flag.XXXXXXXX" --tmpdir=$TEMP_DIR)
-	#CMD_ARGS=$(mktemp -t "cmd_args.XXXXXXXX" --tmpdir=$TEMP_DIR)
-else
-	TEMP_DIR=$(mktemp -dt "tBot.XXXXXXXX" --tmpdir=/run/user/$(id -u))
-	#TEMP_DIR="${HOME}/git/bash/telegram_bot/tBot_d"
-	RAM_JSON="${TEMP_DIR}/json_d.txt"
-	#RAM_JSON=/run/user/1000/tBot.ldfxYEiV/json.IFefd77O
-	CMD_FLAG="${TEMP_DIR}/cmd_flag_d.txt"
-	CMD_ARGS="${TEMP_DIR}/cmd_args_d.txt"
-fi
+source config
 
 Array_Element="0"
 #if [[ -v RAM_JSON && -n RAM_JSON ]]; then

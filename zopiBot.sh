@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source tBot
+source config
 source opi_leds
 
 #exec - execute command in /bin/bash, and get its result
@@ -9,6 +10,7 @@ source opi_leds
 #sayru - say in speakers on russian 
 
 if ! $DEBUG; then
+	echo "0" > ${SIG_to_DIE}
 	[[ $(uname -n) == "orangepizero" ]] && init_leds
 	while true; do
 		echo "$(get_Tlast_message)" > $RAM_JSON
@@ -27,6 +29,9 @@ if ! $DEBUG; then
 		#trig_led $LED1 &
 		#wait $(jobs -p)
 		#sleep 0.013
+		if [[ $(cat ${SIG_to_DIE}) == "9" ]]; then
+			exit 0
+		fi
 	done
 else
 	LAST_MESSAGE_ID=$(cat $LMidFILE)
