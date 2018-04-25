@@ -11,7 +11,7 @@ LMidFILE="last_message_id.txt"
 DEST=/mnt/hard_drive1/zopiBot_trash
 
 if ! $DEBUG ; then
-	TEMP_DIR=/run/user/$(id -u)/telegram_bot
+	TEMP_DIR=/run/user/1000/telegram_bot
 	RAM_JSON=$TEMP_DIR/answer.json
 	CMD_FLAG=$TEMP_DIR/cmd_flag.txt
 	CMD_ARGS=$TEMP_DIR/cmd_args.txt
@@ -30,11 +30,11 @@ else
 	CMD_ARGS="${TEMP_DIR}/cmd_args_d.txt"
 fi
 
-if [[ ! -e $RAM_JSON ]]; then
+#if [[ ! -e $RAM_JSON ]]; then
 	mkdir -p $TEMP_DIR
 	touch $RAM_JSON
 	touch $CMD_FLAG
 	touch $CMD_ARGS
 	touch $SIG_to_DIE
-fi
+#fi
 
