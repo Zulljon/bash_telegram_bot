@@ -36,6 +36,6 @@ fi
 	touch $RAM_JSON
 	touch $CMD_FLAG
 	touch $CMD_ARGS
-	touch $SIG_to_DIE
+	echo "0" > $SIG_to_DIE
 #fi
 
