@@ -11,7 +11,8 @@ LMidFILE="last_message_id.txt"
 DEST=/mnt/hard_drive1/zopiBot_trash
 
 if ! $DEBUG ; then
-	TEMP_DIR=/run/user/1000/telegram_bot
+#	TEMP_DIR=/run/user/1000/telegram_bot
+	TEMP_DIR=/tmp/telegram_bot
 	RAM_JSON=$TEMP_DIR/answer.json
 	CMD_FLAG=$TEMP_DIR/cmd_flag.txt
 	CMD_ARGS=$TEMP_DIR/cmd_args.txt
