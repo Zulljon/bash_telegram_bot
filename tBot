@@ -77,7 +77,7 @@ function sayru_alsa(){
 	# func wait for /path/to/file like first argument
 	local VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
 	cat $1 | text2wave -o ${VOICE_FILE}.wav
-	play -q ${VOICE_FILE}.wav &  > /dev/null 2>&1
+	play -q ${VOICE_FILE}.wav > /dev/null 2>&1
 	[[ "$(uname -n)" == "orangepizero" ]] && mv ${VOICE_FILE}.wav $DEST > /dev/null  2>&1 || rm -f ${VOICE_FILE}.wav
 }
 
