@@ -22,11 +22,11 @@ if ! $DEBUG; then
 			echo $(MESS_TEXT) > $CMD_ARGS
 			parse_text
 
-			blink_led $LED4 &
-			wait $(jobs -p)
+			blink_led $LED4
+			#wait $(jobs -p)
 		else
-			trig_led $LED5 &
-			wait $(jobs -p)
+			trig_led $LED5
+			#wait $(jobs -p)
 		fi
 		#trig_led $LED1 &
 		#wait $(jobs -p)
