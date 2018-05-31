@@ -57,7 +57,7 @@ function parse_text(){
 		echo "" > $CMD_FLAG
 # if not find any, do echo
 	else
-		send_Tmess $CMD_ARGS
+		[[ "$(CHAT_TYPE)" == "private" ]] && send_Tmess $CMD_ARGS
 	fi
 }
 
