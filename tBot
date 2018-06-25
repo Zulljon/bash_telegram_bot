@@ -20,6 +20,20 @@ function MESS_NUMB(){   cat "${RAM_JSON}" | jq -rMa .result[].message.message_id
 function MESS_DATE(){   cat "${RAM_JSON}" | jq -rMa .result[].message.date ; }
 function MESS_TEXT(){   cat "${RAM_JSON}" | jq -rMa .result[].message.text ; }
 
+# server feedback when send anything to server with curl
+# must be 'true' or 'false'
+function sfb_status(){ echo $( cat "${SFB_JSON}" | jq -rM .ok) ; }
+function sfb_messID(){    cat "${SFB_JSON}" | jq -rMa .result.message_id ; }
+function sfb_chatID(){    cat "${SFB_JSON}" | jq -rMa .result.chat.id ; }
+function sfb_chatISBOT(){ cat "${SFB_JSON}" | jq -rMa .result.chat.is_bot ; }
+function sfb_chatUSER(){  cat "${SFB_JSON}" | jq -rMa .result.chat.username ; }
+function sfb_fromID(){    cat "${SFB_JSON}" | jq -rMa .result.from.id ; }
+function sfb_fromUSER(){  cat "${SFB_JSON}" | jq -rMa .result.from.username ; }
+function sfb_fromTYPE(){  cat "${SFB_JSON}" | jq -rMa .result.from.type ; }
+function sfb_date(){      cat "${SFB_JSON}" | jq -rMa .result.date ; }
+function sfb_text(){      cat "${SFB_JSON}" | jq -rMa .result.text ; }
+function sfb_error(){     cat "${SFB_JSON}" | jq -rMa .error_code ; }
+function sfb_err_descr(){ cat "${SFB_JSON}" | jq -rMa .description ; }
 #else
 #	echo "Json file not set!"
 #fi

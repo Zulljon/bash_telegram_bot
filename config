@@ -14,10 +14,11 @@ if ! $DEBUG ; then
 #	TEMP_DIR=/run/user/1000/telegram_bot
 	TEMP_DIR=/tmp/telegram_bot
 	RAM_JSON=$TEMP_DIR/answer.json
+	SFB_JSON=$TEMP_DIR/server_feedback.json
 	CMD_FLAG=$TEMP_DIR/cmd_flag.txt
 	CMD_ARGS=$TEMP_DIR/cmd_args.txt
 	SIG_to_DIE=$TEMP_DIR/status
-	
+
 	#TEMP_DIR=$(mktemp -dt "tBot.XXXXXXXX" --tmpdir=/run/user/$(id -u))
 	#RAM_JSON=$(mktemp -t "json.XXXXXXXX" --tmpdir=$TEMP_DIR)
 	#CMD_FLAG=$(mktemp -t "cmd_flag.XXXXXXXX" --tmpdir=$TEMP_DIR)
@@ -36,6 +37,6 @@ fi
 	touch $RAM_JSON
 	touch $CMD_FLAG
 	touch $CMD_ARGS
+	touch $SFB_JSON
 	echo "0" > $SIG_to_DIE
 #fi
-
