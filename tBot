@@ -3,22 +3,23 @@
 #exec - execute command in /bin/bash, and get its result
 #espeak - get voice message of text (use espeak from linux repo)
 #speakru - get voice message of text on russian (use festvox-ru from linux repo)
-#sayru - say in speakers on russian 
+#sayru - say in speakers on russian
 
 source config
 
-Array_Element="0"
+#Array_Element="0"
 #if [[ -v RAM_JSON && -n RAM_JSON ]]; then
-function UPDATE_ID(){   cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].update_id ; }
-function CHAT_ID(){     cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.chat.id ; }
-function CHAT_TITLE(){  cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.chat.title ; }
-function CHAT_TYPE(){   cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.chat.type ; }
-function FROM_USER(){   cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.from.username ; }
-function FROM_ID(){     cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.from.id ; }
-function FROM_IS_BOT(){ cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.from.is_bot ; }
-function MESS_NUMB(){   cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.message_id ; }
-function MESS_DATE(){   cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.date ; }
-function MESS_TEXT(){   cat "${RAM_JSON}" | jq -rM .result[${Array_Element}].message.text ; }
+function UPDATE_ID(){   cat "${RAM_JSON}" | jq -rMa .result[].update_id ; }
+function CHAT_ID(){     cat "${RAM_JSON}" | jq -rMa .result[].message.chat.id ; }
+function CHAT_TITLE(){  cat "${RAM_JSON}" | jq -rMa .result[].message.chat.title ; }
+function CHAT_TYPE(){   cat "${RAM_JSON}" | jq -rMa .result[].message.chat.type ; }
+function FROM_USER(){   cat "${RAM_JSON}" | jq -rMa .result[].message.from.username ; }
+function FROM_ID(){     cat "${RAM_JSON}" | jq -rMa .result[].message.from.id ; }
+function FROM_IS_BOT(){ cat "${RAM_JSON}" | jq -rMa .result[].message.from.is_bot ; }
+function MESS_NUMB(){   cat "${RAM_JSON}" | jq -rMa .result[].message.message_id ; }
+function MESS_DATE(){   cat "${RAM_JSON}" | jq -rMa .result[].message.date ; }
+function MESS_TEXT(){   cat "${RAM_JSON}" | jq -rMa .result[].message.text ; }
+
 #else
 #	echo "Json file not set!"
 #fi
@@ -68,7 +69,7 @@ function log(){
 
 function send_Tmess(){
 	local MESSAGE="$(cat $1)"
-	curl $CURL_ARGS -X POST "${URL}/sendMessage?" -d chat_id=$(CHAT_ID) -d text="${MESSAGE}" # > /dev/null
+	curl $CURL_ARGS -X POST "${URL}/sendMessage?" -d chat_id=$(CHAT_ID) -d text="${MESSAGE}" # 2>&1 > /dev/null
 	log "[STAT] send message with exit status ${?}"
 	log "	${MESSAGE}"
 }
@@ -84,8 +85,8 @@ function sayru_alsa(){
 function send_Tvoice(){
 	local VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
 	espeak -w ${VOICE_FILE}.wav "$( cat $1 )"
-	ffmpeg -i ${VOICE_FILE}.wav ${VOICE_FILE}.ogg 2>&1 > /dev/null 
-	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
+	ffmpeg -i ${VOICE_FILE}.wav ${VOICE_FILE}.ogg 2>&1 > /dev/null
+	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
 	log "[STAT] send response with exit status ${?}"
 	log "	$( cat $1 )"
 	[[ $(uname -n) == "orangepizero" ]] && mv ${VOICE_FILE}.wav $DEST > /dev/null 2>&1
@@ -98,7 +99,7 @@ function send_TvoiceRU(){
 	local VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
 	cat $1 | text2wave -o ${VOICE_FILE}.wav
 	ffmpeg -i ${VOICE_FILE}.wav ${VOICE_FILE}.ogg > /dev/null 2>&1
-	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
+	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
 	[[ $(uname -n) == "orangepizero" ]] && mv ${VOICE_FILE}.wav $DEST > /dev/null 2>&1
 	rm -f ${VOICE_FILE}.wav
 	rm ${VOICE_FILE}.ogg
@@ -106,7 +107,7 @@ function send_TvoiceRU(){
 
 function send_Tphoto(){
 	local PHOTO="$1"
-	curl $CURL_ARGS -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # > /dev/null 2>&1
+	curl $CURL_ARGS -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
 }
 
 function get_Updates(){
