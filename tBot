@@ -85,7 +85,10 @@ function log(){
 function send_Tmess(){
 	local MESSAGE
 	MESSAGE="$(cat "$1")"
-	curl "$CURL_ARGS" -X POST "${URL}/sendMessage?" -d chat_id="$(CHAT_ID)" -d text="${MESSAGE}" # > /dev/null 2>&1
+	curl -X POST $CURL_ARGS \
+		--url "${URL}/sendMessage?" \
+		--form chat_id="$(CHAT_ID)" \
+		--form text="${MESSAGE}" # > /dev/null 2>&1
 	log "[STAT] send message with exit status ${?}"
 	log "	${MESSAGE}"
 }
@@ -108,7 +111,7 @@ function send_Tvoice(){
 	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
 	espeak -w "${VOICE_FILE}.wav" "$( cat "$1" )"
 	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
-	curl "$CURL_ARGS" -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
+	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
 	log "[STAT] send response with exit status ${?}"
 	log "	$( cat "$1" )"
 	[[ $(uname -n) == "orangepizero" ]] && mv "${VOICE_FILE}.wav" "$DEST" > /dev/null 2>&1
@@ -122,7 +125,7 @@ function send_TvoiceRU(){
 	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
 	text2wave -o "${VOICE_FILE}.wav" < "$1"
 	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
-	curl "$CURL_ARGS" -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
+	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
 	[[ $(uname -n) == "orangepizero" ]] && mv "${VOICE_FILE}.wav" "$DEST" > /dev/null 2>&1
 	rm -f "${VOICE_FILE}.wav"
 	rm "${VOICE_FILE}.ogg"
@@ -130,7 +133,7 @@ function send_TvoiceRU(){
 
 function send_Tphoto(){
 	local PHOTO="$1"
-	curl "$CURL_ARGS" -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
+	curl $CURL_ARGS -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
 }
 }
 
@@ -140,7 +143,7 @@ function file_size() {
 }
 
 #function get_Updates(){
-	#echo "$(curl "$CURL_ARGS" -X GET "${URL}/getUpdates" )"
+	#echo "$(curl $CURL_ARGS -X GET "${URL}/getUpdates" )"
 #}
 
 function get_Tlast_message(){
