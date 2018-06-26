@@ -1,5 +1,16 @@
-last_message_id.txt
-test.json
-bot_token.txt
-jsonParse
-status.log
+# ignore all
+*
+# exepts this files
+!.gitignore
+!config
+!opi_leds
+!config
+!README.md
+!tBot
+!zopiBot.sh
+
+# last_message_id.txt
+# test.json
+# bot_token.txt
+# jsonParse
+# status.log
