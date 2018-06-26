@@ -130,5 +130,7 @@ function get_Updates(){
 
 function get_Tlast_message(){
 	LAST_MESSAGE_ID=$(cat ${LMidFILE})
-	echo "$(curl $CURL_ARGS -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1 )"
+	#echo "$(curl -s --max-time 30 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1 )"
+	curl -s --max-time 10 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1
+}
 }

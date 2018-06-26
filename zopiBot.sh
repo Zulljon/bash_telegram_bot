@@ -15,7 +15,9 @@ if ! $DEBUG; then
 	echo "0" > ${SIG_to_DIE}
 	[[ $(uname -n) == "orangepizero" ]] && init_leds
 	while true; do
-		echo "$(get_Tlast_message)" > $RAM_JSON
+		# ask server for new massage to bot, if there is, give me 1 pls
+		get_Tlast_message
+		# update & save last_message_id, according to BOT API
 		if [[ $(UPDATE_ID) -eq $(cat ${LMidFILE} ) && $(UPDATE_ID) != "null" ]]; then
 			echo $(($(UPDATE_ID)+1)) > $LMidFILE
 
