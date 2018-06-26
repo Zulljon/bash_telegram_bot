@@ -135,6 +135,13 @@ function send_Tphoto(){
 	local PHOTO="$1"
 	curl $CURL_ARGS -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
 }
+
+function send_Tdoc(){
+	local path_to_file="$1"
+	curl $CURL_ARGS -X POST \
+		--url "${URL}/sendDocument?" \
+		--form chat_id="$(CHAT_ID)" \
+		--form "document=@${path_to_file}" # 2>&1 > /dev/null
 }
 
 function file_size() {
@@ -151,5 +158,46 @@ function get_Tlast_message(){
 	#echo "$(curl -s --max-time 30 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1 )"
 	curl -s --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1
 }
+
+function send_Tchat_action() {
+	[ "$2" = "" ] && return
+	# variants are :
+	# "upload_photo" for photos
+	# "record_video" or "upload_video" for videos
+	# "record_audio" or "upload_audio" for audio files
+	# "upload_document" for general files
+	# "find_location" for location data,
+	# "record_video_note" or "upload_video_note" for video notes
+	curl -s -X POST "${URL}/sendChatAction?" -d chat_id="${1}" -d action="$2"
 }
+
+function send_Tmess_buttons(){
+	[ "$1" = "" ] && return
+	[ "$2" = "" ] && return
+	local MESSAGE
+	MESSAGE="$(cat "$1")"
+	local CUSTOM_BUTTONS="${2}" # [[\"option1\",\"op3\"],[\"option2\",\"op4\"]]
+	curl $CURL_ARGS --request POST \
+	    --url "${URL}/sendMessage?" \
+	    --header 'content-type: multipart/form-data' \
+	    --form chat_id="$(CHAT_ID)" \
+	    --form text="${MESSAGE}" \
+	    --form reply_markup="{\"keyboard\":${CUSTOM_BUTTONS},\"one_time_keyboard\":true}"
+	log "[STAT] send message with exit status ${?}"
+	log "	${MESSAGE}"
+}
+
+function send_Tmess_1button() {
+	[ "$1" = "" ] && return
+	local MESSAGE
+	MESSAGE="$(cat "$1")"
+	local CUSTOM_BUTTON="${2}"
+	curl $CURL_ARGS --request POST \
+		--url "${URL}/sendMessage?" \
+		--header 'content-type: multipart/form-data' \
+		--form chat_id="$(CHAT_ID)" \
+		--form text="${MESSAGE}" \
+		--form reply_markup="{\"keyboard\":${CUSTOM_BUTTON},\"one_time_keyboard\":true}"
+		log "[STAT] send message with exit status ${?}"
+		log "	${MESSAGE}"
 }
