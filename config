@@ -14,10 +14,10 @@ if ! $DEBUG ; then
 #	TEMP_DIR=/run/user/1000/telegram_bot
 	TEMP_DIR="/tmp/telegram_bot"
 	RAM_JSON="${TEMP_DIR}/answer.json"
-	SFB_JSON="${TEMP_DIR}"/server_feedback.json
-	CMD_FLAG="${TEMP_DIR}"/cmd_flag.txt
-	CMD_ARGS="${TEMP_DIR}"/cmd_args.txt
-	SIG_to_DIE="${TEMP_DIR}"/status
+	SFB_JSON="${TEMP_DIR}/server_feedback.json"
+	CMD_FLAG="${TEMP_DIR}/cmd_flag.txt"
+	CMD_ARGS="${TEMP_DIR}/cmd_args.txt"
+	SIG_to_DIE="${TEMP_DIR}/status"
 
 	#TEMP_DIR=$(mktemp -dt "tBot.XXXXXXXX" --tmpdir=/run/user/$(id -u))
 	#RAM_JSON=$(mktemp -t "json.XXXXXXXX" --tmpdir=$TEMP_DIR)
