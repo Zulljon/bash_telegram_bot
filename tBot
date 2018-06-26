@@ -9,70 +9,71 @@ source config
 
 #Array_Element="0"
 #if [[ -v RAM_JSON && -n RAM_JSON ]]; then
-function UPDATE_ID(){   cat "${RAM_JSON}" | jq -rMa .result[].update_id ; }
-function CHAT_ID(){     cat "${RAM_JSON}" | jq -rMa .result[].message.chat.id ; }
-function CHAT_TITLE(){  cat "${RAM_JSON}" | jq -rMa .result[].message.chat.title ; }
-function CHAT_TYPE(){   cat "${RAM_JSON}" | jq -rMa .result[].message.chat.type ; }
-function FROM_USER(){   cat "${RAM_JSON}" | jq -rMa .result[].message.from.username ; }
-function FROM_ID(){     cat "${RAM_JSON}" | jq -rMa .result[].message.from.id ; }
-function FROM_IS_BOT(){ cat "${RAM_JSON}" | jq -rMa .result[].message.from.is_bot ; }
-function MESS_NUMB(){   cat "${RAM_JSON}" | jq -rMa .result[].message.message_id ; }
-function MESS_DATE(){   cat "${RAM_JSON}" | jq -rMa .result[].message.date ; }
-function MESS_TEXT(){   cat "${RAM_JSON}" | jq -rMa .result[].message.text ; }
+function UPDATE_ID(){   jq -rMa .result[].update_id < "${RAM_JSON}" ; }
+function CHAT_ID(){     jq -rMa .result[].message.chat.id < "${RAM_JSON}" ; }
+function CHAT_TITLE(){  jq -rMa .result[].message.chat.title < "${RAM_JSON}" ; }
+function CHAT_TYPE(){   jq -rMa .result[].message.chat.type < "${RAM_JSON}" ; }
+function FROM_USER(){   jq -rMa .result[].message.from.username < "${RAM_JSON}" ; }
+function FROM_ID(){     jq -rMa .result[].message.from.id < "${RAM_JSON}" ; }
+function FROM_IS_BOT(){ jq -rMa .result[].message.from.is_bot < "${RAM_JSON}" ; }
+function MESS_NUMB(){   jq -rMa .result[].message.message_id < "${RAM_JSON}" ; }
+function MESS_DATE(){   jq -rMa .result[].message.date < "${RAM_JSON}" ; }
+function MESS_TEXT(){   jq -rMa .result[].message.text < "${RAM_JSON}" ; }
 
 # server feedback when send anything to server with curl
 # must be 'true' or 'false'
-function sfb_status(){ echo $( cat "${SFB_JSON}" | jq -rM .ok) ; }
-function sfb_messID(){    cat "${SFB_JSON}" | jq -rMa .result.message_id ; }
-function sfb_chatID(){    cat "${SFB_JSON}" | jq -rMa .result.chat.id ; }
-function sfb_chatISBOT(){ cat "${SFB_JSON}" | jq -rMa .result.chat.is_bot ; }
-function sfb_chatUSER(){  cat "${SFB_JSON}" | jq -rMa .result.chat.username ; }
-function sfb_fromID(){    cat "${SFB_JSON}" | jq -rMa .result.from.id ; }
-function sfb_fromUSER(){  cat "${SFB_JSON}" | jq -rMa .result.from.username ; }
-function sfb_fromTYPE(){  cat "${SFB_JSON}" | jq -rMa .result.from.type ; }
-function sfb_date(){      cat "${SFB_JSON}" | jq -rMa .result.date ; }
-function sfb_text(){      cat "${SFB_JSON}" | jq -rMa .result.text ; }
-function sfb_error(){     cat "${SFB_JSON}" | jq -rMa .error_code ; }
-function sfb_err_descr(){ cat "${SFB_JSON}" | jq -rMa .description ; }
+function sfb_status(){    jq -rM .ok < "${SFB_JSON}" ; }
+function sfb_messID(){    jq -rMa .result.message_id < "${SFB_JSON}" ; }
+function sfb_chatID(){    jq -rMa .result.chat.id < "${SFB_JSON}" ; }
+function sfb_chatISBOT(){ jq -rMa .result.chat.is_bot < "${SFB_JSON}" ; }
+function sfb_chatUSER(){  jq -rMa .result.chat.username < "${SFB_JSON}" ; }
+function sfb_fromID(){    jq -rMa .result.from.id < "${SFB_JSON}" ; }
+function sfb_fromUSER(){  jq -rMa .result.from.username < "${SFB_JSON}" ; }
+function sfb_fromTYPE(){  jq -rMa .result.from.type < "${SFB_JSON}" ; }
+function sfb_date(){      jq -rMa .result.date < "${SFB_JSON}" ; }
+function sfb_text(){      jq -rMa .result.text < "${SFB_JSON}" ; }
+function sfb_error(){     jq -rMa .error_code < "${SFB_JSON}" ; }
+function sfb_err_descr(){ jq -rMa .description < "${SFB_JSON}" ; }
 #else
 #	echo "Json file not set!"
 #fi
 
 function parse_text(){
-	VAR=$(cat $CMD_ARGS | awk '{print $1}')
+	MESS_TEXT > "$CMD_ARGS"
+	VAR=$( awk '{print $1}' < "$CMD_ARGS" )
 # find commands in message
-	if [[ $( echo $VAR | awk '{gsub(/\/\w+/,"TRUE",$0);print $0}') == "TRUE" ]]; then
+	if [[ $( echo "$VAR" | awk '{gsub(/\/\w+/,"TRUE",$0);print $0}') == "TRUE" ]]; then
 		case $VAR in
 			"/espeak" )
-				echo "espeak" > $CMD_FLAG	;;
+				echo "espeak" > "$CMD_FLAG"	;;
 			"/speakru")
-				echo "speakru" > $CMD_FLAG	;;
+				echo "speakru" > "$CMD_FLAG"	;;
 			"/exec" )
-				echo "exec" > $CMD_FLAG	;;
+				echo "exec" > "$CMD_FLAG"	;;
 			"/sayru" )
-				echo "sayru" > $CMD_FLAG	;;
+				echo "sayru" > "$CMD_FLAG"	;;
 		esac
 # if get flag, execute apropriate command
-	elif [[ $(cat $CMD_FLAG) != "" ]]; then
-		case $(cat $CMD_FLAG) in
+	elif [[ $(cat "$CMD_FLAG") != "" ]]; then
+		case $(cat "$CMD_FLAG") in
 			espeak )
-				send_Tvoice $CMD_ARGS
+				send_Tvoice "$CMD_ARGS"
 				;;
 			speakru )
-				send_TvoiceRU $CMD_ARGS
+				send_TvoiceRU "$CMD_ARGS"
 				;;
 			exec )
-				RESULT=$( $(cat $CMD_ARGS) )
+				RESULT="$( $(cat $CMD_ARGS) )"
 				send_Tmess "$RESULT"
 				;;
 			sayru )
-				sayru_alsa $CMD_ARGS
+				sayru_alsa "$CMD_ARGS"
 				;;
 		esac
-		echo "" > $CMD_FLAG
+		echo "" > "$CMD_FLAG"
 # if not find any, do echo
 	else
-		[[ "$(CHAT_TYPE)" == "private" ]] && send_Tmess $CMD_ARGS
+		[[ "$(CHAT_TYPE)" == "private" ]] && send_Tmess "$CMD_ARGS"
 	fi
 }
 
@@ -82,55 +83,70 @@ function log(){
 }
 
 function send_Tmess(){
-	local MESSAGE="$(cat $1)"
-	curl $CURL_ARGS -X POST "${URL}/sendMessage?" -d chat_id=$(CHAT_ID) -d text="${MESSAGE}" # 2>&1 > /dev/null
+	local MESSAGE
+	MESSAGE="$(cat "$1")"
+	curl "$CURL_ARGS" -X POST "${URL}/sendMessage?" -d chat_id="$(CHAT_ID)" -d text="${MESSAGE}" # > /dev/null 2>&1
 	log "[STAT] send message with exit status ${?}"
 	log "	${MESSAGE}"
 }
 
 function sayru_alsa(){
 	# func wait for /path/to/file like first argument
-	local VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
-	cat $1 | text2wave -o ${VOICE_FILE}.wav
-	play -q ${VOICE_FILE}.wav > /dev/null 2>&1
-	[[ "$(uname -n)" == "orangepizero" ]] && mv ${VOICE_FILE}.wav $DEST > /dev/null  2>&1 || rm -f ${VOICE_FILE}.wav
+	local VOICE_FILE
+	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
+	text2wave -o "${VOICE_FILE}.wav" < "$1"
+	play -q "${VOICE_FILE}.wav" > /dev/null 2>&1
+	if [[ "$(uname -n)" == "orangepizero" ]] ; then
+		mv "${VOICE_FILE}.wav" "$DEST" > /dev/null  2>&1
+	else
+		rm -f "${VOICE_FILE}.wav"
+	fi
 }
 
 function send_Tvoice(){
-	local VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
-	espeak -w ${VOICE_FILE}.wav "$( cat $1 )"
-	ffmpeg -i ${VOICE_FILE}.wav ${VOICE_FILE}.ogg 2>&1 > /dev/null
-	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
+	local VOICE_FILE
+	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
+	espeak -w "${VOICE_FILE}.wav" "$( cat "$1" )"
+	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
+	curl "$CURL_ARGS" -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
 	log "[STAT] send response with exit status ${?}"
-	log "	$( cat $1 )"
-	[[ $(uname -n) == "orangepizero" ]] && mv ${VOICE_FILE}.wav $DEST > /dev/null 2>&1
-	rm -f ${VOICE_FILE}.wav
-	rm -f ${VOICE_FILE}.ogg
+	log "	$( cat "$1" )"
+	[[ $(uname -n) == "orangepizero" ]] && mv "${VOICE_FILE}.wav" "$DEST" > /dev/null 2>&1
+	rm -f "${VOICE_FILE}.wav"
+	rm -f "${VOICE_FILE}.ogg"
 }
 
 function send_TvoiceRU(){
 	# func wait for /path/to/file like first argument
-	local VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
-	cat $1 | text2wave -o ${VOICE_FILE}.wav
-	ffmpeg -i ${VOICE_FILE}.wav ${VOICE_FILE}.ogg > /dev/null 2>&1
-	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
-	[[ $(uname -n) == "orangepizero" ]] && mv ${VOICE_FILE}.wav $DEST > /dev/null 2>&1
-	rm -f ${VOICE_FILE}.wav
-	rm ${VOICE_FILE}.ogg
+	local VOICE_FILE
+	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
+	text2wave -o "${VOICE_FILE}.wav" < "$1"
+	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
+	curl "$CURL_ARGS" -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
+	[[ $(uname -n) == "orangepizero" ]] && mv "${VOICE_FILE}.wav" "$DEST" > /dev/null 2>&1
+	rm -f "${VOICE_FILE}.wav"
+	rm "${VOICE_FILE}.ogg"
 }
 
 function send_Tphoto(){
 	local PHOTO="$1"
-	curl $CURL_ARGS -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
+	curl "$CURL_ARGS" -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
+}
 }
 
-function get_Updates(){
-	echo "$(curl $CURL_ARGS -X GET "${URL}/getUpdates" )"
+function file_size() {
+	path_to_file="$1"
+	stat --printf="%s" "$path_to_file"
 }
+
+#function get_Updates(){
+	#echo "$(curl "$CURL_ARGS" -X GET "${URL}/getUpdates" )"
+#}
 
 function get_Tlast_message(){
-	LAST_MESSAGE_ID=$(cat ${LMidFILE})
+	LAST_MESSAGE_ID="$(cat "${LMidFILE}")"
 	#echo "$(curl -s --max-time 30 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1 )"
-	curl -s --max-time 10 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1
+	curl -s --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1
+}
 }
 }
