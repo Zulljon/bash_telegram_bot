@@ -24,7 +24,7 @@ if ! $DEBUG; then
 			# find if text is command like message
 			parse_text
 
-			blink_led "$LED4"
+			#blink_led "$LED4"
 			#wait $(jobs -p)
 		else
 			trig_led "$LED5"
@@ -33,10 +33,10 @@ if ! $DEBUG; then
 		#trig_led $LED1 &
 		#wait $(jobs -p)
 		#sleep 0.013
+		[[ $DEBUG_OUTPUT -eq true ]] && debug_info
 		if [[ "$(cat "${SIG_to_DIE}")" == "9" ]]; then
 			exit 0
 		fi
-		[[ $DEBUG_OUTPUT -eq true ]] && debug_info
 	done
 else
 	LAST_MESSAGE_ID="$(cat "$LMidFILE")"
