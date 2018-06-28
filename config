@@ -3,6 +3,7 @@
 #	Init of all needed varible
 
 DEBUG=false
+DEBUG_OUTPUT=true
 CURL_ARGS="-s --max-time 30 --output $SFB_JSON" # default "-s"
 
 TOKEN="$(cat bot_token.txt)"

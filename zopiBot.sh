@@ -36,6 +36,7 @@ if ! $DEBUG; then
 		if [[ "$(cat "${SIG_to_DIE}")" == "9" ]]; then
 			exit 0
 		fi
+		[[ $DEBUG_OUTPUT -eq true ]] && debug_info
 	done
 else
 	LAST_MESSAGE_ID="$(cat "$LMidFILE")"

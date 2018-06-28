@@ -201,3 +201,26 @@ function send_Tmess_1button() {
 		log "[STAT] send message with exit status ${?}"
 		log "	${MESSAGE}"
 }
+
+function debug_info() {
+	local COLUMNSasd=$(tput cols)
+	local SYMBOL_start='★' #'⛹' #⛟⛹⚽★
+	local SYMBOL_end='⚽' #'⛹' #⛟⛹⚽★
+	i=0
+# START
+	for (( i = 0; i < COLUMNSasd; i++ )); do
+		echo -en "$SYMBOL_start"
+	done
+
+	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tGet updade from server"
+		cat $RAM_JSON
+	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tServer feedback on answer"
+		cat $SFB_JSON
+	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tsignal to die $(cat $SIG_to_DIE)"
+	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tlast message id = $(cat $LMidFILE)"
+
+# END
+	for (( i = 0; i < COLUMNSasd; i++ )); do
+		echo -en "$SYMBOL_end"
+	done
+}
