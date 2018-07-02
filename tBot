@@ -85,6 +85,7 @@ function log(){
 function send_Tmess(){
 	local MESSAGE
 	MESSAGE="$(cat "$1")"
+	send_Tchat_action "$(CHAT_ID)" "typing"
 	curl -X POST $CURL_ARGS \
 		--url "${URL}/sendMessage?" \
 		--form chat_id="$(CHAT_ID)" \
@@ -109,6 +110,7 @@ function sayru_alsa(){
 function send_Tvoice(){
 	local VOICE_FILE
 	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
+	send_Tchat_action "$(CHAT_ID)" "record_audio"
 	espeak -w "${VOICE_FILE}.wav" "$( cat "$1" )"
 	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
 	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
@@ -123,6 +125,7 @@ function send_TvoiceRU(){
 	# func wait for /path/to/file like first argument
 	local VOICE_FILE
 	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
+	send_Tchat_action "$(CHAT_ID)" "record_audio"
 	text2wave -o "${VOICE_FILE}.wav" < "$1"
 	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
 	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # 2>&1 > /dev/null
@@ -133,11 +136,13 @@ function send_TvoiceRU(){
 
 function send_Tphoto(){
 	local PHOTO="$1"
+	send_Tchat_action $(CHAT_ID) "upload_photo"
 	curl $CURL_ARGS -X POST "${URL}/sendPhoto?chat_id=$(CHAT_ID)&" -F "photo=@${PHOTO}" # 2>&1 > /dev/null
 }
 
 function send_Tdoc(){
 	local path_to_file="$1"
+	send_Tchat_action "$(CHAT_ID)" "upload_document"
 	curl $CURL_ARGS -X POST \
 		--url "${URL}/sendDocument?" \
 		--form chat_id="$(CHAT_ID)" \
@@ -162,6 +167,7 @@ function get_Tlast_message(){
 function send_Tchat_action() {
 	[ "$2" = "" ] && return
 	# variants are :
+	# "typing" for text messages
 	# "upload_photo" for photos
 	# "record_video" or "upload_video" for videos
 	# "record_audio" or "upload_audio" for audio files
