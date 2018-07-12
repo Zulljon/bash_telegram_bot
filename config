@@ -5,6 +5,26 @@
 DEBUG=false
 DEBUG_OUTPUT=false
 CURL_ARGS="-s --max-time 30 --output $SFB_JSON" # default "-s"
+MAIN_MENU='[
+			["показать все функции","показать помощь"],
+			["включить котёл","выключить котёл"],
+			["температура дома","ЧАВО"]
+		   ]'
+
+HELP_en="Hello, this is bot for testing & fun sheet.
+Made by zulljon.
+Avialable commands:
+/exec - execute command in /bin/bash, and get its result
+/espeak - get voice message of text (use espeak from linux repo)
+/speakru - get voice message of text on russian (use festvox-ru from linux repo)
+/sayru - say in speakers on russian"
+HELP_ru="Привет, этот бот для тестирования всякой всячины и развлечений.
+Создатель и повелитель - zulljon.
+Доступные комманды:
+/exec - запуск команд /bin/bash, и получить результат выполнения
+/espeak - голосовое сообщение текста (использует espeak из linux репозитория)
+/speakru - голосовое сообщение русского текста (use festvox-ru from linux repo)
+/sayru - проиграть голосовое сообщение в динамиках"
 
 TOKEN="$(cat bot_token.txt)"
 URL="https://api.telegram.org/bot${TOKEN}"

@@ -52,6 +52,9 @@ function parse_text(){
 				echo "exec" > "$CMD_FLAG"	;;
 			"/sayru" )
 				echo "sayru" > "$CMD_FLAG"	;;
+			"/start" )
+				"$HELP_en" > "$CMD_ARGS" ; send_Tmess "$CMD_ARGS"
+				send_Tmess_buttons $(CHAT_ID) "$MAIN_MENU" ;;
 		esac
 # if get flag, execute apropriate command
 	elif [[ $(cat "$CMD_FLAG") != "" ]]; then
@@ -69,6 +72,10 @@ function parse_text(){
 			sayru )
 				sayru_alsa "$CMD_ARGS"
 				;;
+#			start )
+#				send_Tmess
+#				send_Tmess_buttons $(CHAT_ID) "$MAIN_MENU" ;;
+#				;;
 		esac
 		echo "" > "$CMD_FLAG"
 # if not find any, do echo
