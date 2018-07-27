@@ -66,7 +66,7 @@ function parse_text(){
 				send_TvoiceRU "$CMD_ARGS"
 				;;
 			exec )
-				RESULT="$( $(cat $CMD_ARGS) )"
+				RESULT="$( $CMD_ARGS )"
 				send_Tmess "$RESULT"
 				;;
 			sayru )
@@ -168,7 +168,7 @@ function file_size() {
 function get_Tlast_message(){
 	LAST_MESSAGE_ID="$(cat "${LMidFILE}")"
 	#echo "$(curl -s --max-time 30 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1 )"
-	curl -s --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1
+	curl -v -v --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1
 }
 
 function send_Tchat_action() {
