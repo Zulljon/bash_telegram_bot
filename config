@@ -3,7 +3,7 @@
 #	Init of all needed varible
 
 DEBUG=false
-DEBUG_OUTPUT=false
+DEBUG_OUTPUT="false"
 CURL_ARGS="-s --max-time 30 --output $SFB_JSON" # default "-s"
 MAIN_MENU='[
 			["показать все функции","показать помощь"],

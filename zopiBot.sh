@@ -33,7 +33,7 @@ if ! $DEBUG; then
 		#trig_led $LED1 &
 		#wait $(jobs -p)
 		#sleep 0.013
-		[[ $DEBUG_OUTPUT -eq true ]] && debug_info
+		[[ $DEBUG_OUTPUT == "true" ]] && debug_info
 		if [[ "$(cat "${SIG_to_DIE}")" == "9" ]]; then
 			exit 0
 		fi
