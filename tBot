@@ -117,9 +117,21 @@ function sayru_alsa(){
 function send_Tvoice(){
 	local VOICE_FILE
 	VOICE_FILE="$TEMP_DIR/$(MESS_DATE)_$(FROM_USER)"
-	send_Tchat_action "$(CHAT_ID)" "record_audio"
-	espeak -w "${VOICE_FILE}.wav" "$( cat "$1" )"
-	ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
+	(
+		espeak -w "${VOICE_FILE}.wav" "$( cat "$1" )"
+		ffmpeg -i "${VOICE_FILE}.wav" "${VOICE_FILE}.ogg" > /dev/null 2>&1
+	) &
+	pId=$!
+
+	while true; do
+		if [[ $(ps -o "%p" --pid "$pId" | tail -n 1) -eq "$pId" ]]; then
+			send_Tchat_action "$(CHAT_ID)" "record_audio"
+		else
+			break
+		fi
+		sleep 4.5
+	done
+
 	curl $CURL_ARGS -X POST "${URL}/sendVoice?chat_id=$(CHAT_ID)&" -F "voice=@${VOICE_FILE}.ogg" # > /dev/null 2>&1
 	log "[STAT] send response with exit status ${?}"
 	log "	$( cat "$1" )"
@@ -168,7 +180,7 @@ function file_size() {
 function get_Tlast_message(){
 	LAST_MESSAGE_ID="$(cat "${LMidFILE}")"
 	#echo "$(curl -s --max-time 30 --output $RAM_JSON -X GET "${URL}/getUpdates?" -d offset=${LAST_MESSAGE_ID} -d limit=1 )"
-	curl --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1
+	curl -s --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1 2> /dev/null
 }
 
 function send_Tchat_action() {
