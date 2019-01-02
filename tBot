@@ -5,7 +5,7 @@
 #speakru - get voice message of text on russian (use festvox-ru from linux repo)
 #sayru - say in speakers on russian
 
-source config
+source ${CORE_DIR}/config
 
 #Array_Element="0"
 #if [[ -v RAM_JSON && -n RAM_JSON ]]; then

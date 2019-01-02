@@ -11,7 +11,7 @@ MAIN_MENU='[
 			["температура дома","ЧАВО"]
 		   ]'
 
-HELP_en="Hello, this is bot for testing & fun sheet.
+HELP_en="Hello, this is bot for testing and fun sheet.
 Made by zulljon.
 Avialable commands:
 /exec - execute command in /bin/bash, and get its result
@@ -26,9 +26,9 @@ HELP_ru="Привет, этот бот для тестирования всяк�
 /speakru - голосовое сообщение русского текста (use festvox-ru from linux repo)
 /sayru - проиграть голосовое сообщение в динамиках"
 
-TOKEN="$(cat bot_token.txt)"
+TOKEN="$(cat ${CORE_DIR}/bot_token.txt)"
 URL="https://api.telegram.org/bot${TOKEN}"
-LMidFILE="last_message_id.txt"
+LMidFILE="${CORE_DIR}/last_message_id.txt"
 DEST="/mnt/hard_drive1/zopiBot_trash"
 
 if ! $DEBUG ; then

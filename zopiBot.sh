@@ -2,9 +2,10 @@
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
-source tBot
-source config
-source opi_leds
+CORE_DIR="$(cd $(dirname $0);pwd)"
+source ${CORE_DIR}/tBot
+source ${CORE_DIR}/config
+source ${CORE_DIR}/opi_leds
 
 #exec - execute command in /bin/bash, and get its result
 #espeak - get voice message of text (use espeak from linux repo)
