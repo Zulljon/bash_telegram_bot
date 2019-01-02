@@ -9,31 +9,31 @@ source config
 
 #Array_Element="0"
 #if [[ -v RAM_JSON && -n RAM_JSON ]]; then
-function UPDATE_ID(){   jq -rMa .result[].update_id < "${RAM_JSON}" ; }
-function CHAT_ID(){     jq -rMa .result[].message.chat.id < "${RAM_JSON}" ; }
-function CHAT_TITLE(){  jq -rMa .result[].message.chat.title < "${RAM_JSON}" ; }
-function CHAT_TYPE(){   jq -rMa .result[].message.chat.type < "${RAM_JSON}" ; }
-function FROM_USER(){   jq -rMa .result[].message.from.username < "${RAM_JSON}" ; }
-function FROM_ID(){     jq -rMa .result[].message.from.id < "${RAM_JSON}" ; }
-function FROM_IS_BOT(){ jq -rMa .result[].message.from.is_bot < "${RAM_JSON}" ; }
-function MESS_NUMB(){   jq -rMa .result[].message.message_id < "${RAM_JSON}" ; }
-function MESS_DATE(){   jq -rMa .result[].message.date < "${RAM_JSON}" ; }
-function MESS_TEXT(){   jq -rMa .result[].message.text < "${RAM_JSON}" ; }
+function UPDATE_ID(){   jq -rM .result[].update_id < "${RAM_JSON}" ; }
+function CHAT_ID(){     jq -rM .result[].message.chat.id < "${RAM_JSON}" ; }
+function CHAT_TITLE(){  jq -rM .result[].message.chat.title < "${RAM_JSON}" ; }
+function CHAT_TYPE(){   jq -rM .result[].message.chat.type < "${RAM_JSON}" ; }
+function FROM_USER(){   jq -rM .result[].message.from.username < "${RAM_JSON}" ; }
+function FROM_ID(){     jq -rM .result[].message.from.id < "${RAM_JSON}" ; }
+function FROM_IS_BOT(){ jq -rM .result[].message.from.is_bot < "${RAM_JSON}" ; }
+function MESS_NUMB(){   jq -rM .result[].message.message_id < "${RAM_JSON}" ; }
+function MESS_DATE(){   jq -rM .result[].message.date < "${RAM_JSON}" ; }
+function MESS_TEXT(){   jq -rM .result[].message.text < "${RAM_JSON}" ; }
 
 # server feedback when send anything to server with curl
 # must be 'true' or 'false'
 function sfb_status(){    jq -rM .ok < "${SFB_JSON}" ; }
-function sfb_messID(){    jq -rMa .result.message_id < "${SFB_JSON}" ; }
-function sfb_chatID(){    jq -rMa .result.chat.id < "${SFB_JSON}" ; }
-function sfb_chatISBOT(){ jq -rMa .result.chat.is_bot < "${SFB_JSON}" ; }
-function sfb_chatUSER(){  jq -rMa .result.chat.username < "${SFB_JSON}" ; }
-function sfb_fromID(){    jq -rMa .result.from.id < "${SFB_JSON}" ; }
-function sfb_fromUSER(){  jq -rMa .result.from.username < "${SFB_JSON}" ; }
-function sfb_fromTYPE(){  jq -rMa .result.from.type < "${SFB_JSON}" ; }
-function sfb_date(){      jq -rMa .result.date < "${SFB_JSON}" ; }
-function sfb_text(){      jq -rMa .result.text < "${SFB_JSON}" ; }
-function sfb_error(){     jq -rMa .error_code < "${SFB_JSON}" ; }
-function sfb_err_descr(){ jq -rMa .description < "${SFB_JSON}" ; }
+function sfb_messID(){    jq -rM .result.message_id < "${SFB_JSON}" ; }
+function sfb_chatID(){    jq -rM .result.chat.id < "${SFB_JSON}" ; }
+function sfb_chatISBOT(){ jq -rM .result.chat.is_bot < "${SFB_JSON}" ; }
+function sfb_chatUSER(){  jq -rM .result.chat.username < "${SFB_JSON}" ; }
+function sfb_fromID(){    jq -rM .result.from.id < "${SFB_JSON}" ; }
+function sfb_fromUSER(){  jq -rM .result.from.username < "${SFB_JSON}" ; }
+function sfb_fromTYPE(){  jq -rM .result.from.type < "${SFB_JSON}" ; }
+function sfb_date(){      jq -rM .result.date < "${SFB_JSON}" ; }
+function sfb_text(){      jq -rM .result.text < "${SFB_JSON}" ; }
+function sfb_error(){     jq -rM .error_code < "${SFB_JSON}" ; }
+function sfb_err_descr(){ jq -rM .description < "${SFB_JSON}" ; }
 #else
 #	echo "Json file not set!"
 #fi
