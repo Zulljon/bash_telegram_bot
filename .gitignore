@@ -9,7 +9,8 @@
 !tBot
 !zopiBot.sh
 
-# last_message_id.txt
+# last_message_id
+# last_message_date
 # test.json
 # bot_token.txt
 # jsonParse

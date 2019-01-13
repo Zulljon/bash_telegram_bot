@@ -28,7 +28,8 @@ HELP_ru="Привет, этот бот для тестирования всяк�
 
 TOKEN="$(cat ${CORE_DIR}/bot_token.txt)"
 URL="https://api.telegram.org/bot${TOKEN}"
-LMidFILE="${CORE_DIR}/last_message_id.txt"
+LMidFILE="${CORE_DIR}/last_message_id"
+LMdateFILE="${CORE_DIR}/last_message_date"
 DEST="/mnt/hard_drive1/zopiBot_trash"
 
 if ! $DEBUG ; then
