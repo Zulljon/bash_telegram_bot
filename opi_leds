@@ -13,15 +13,17 @@ ON=1
 OFF=0
 
 function init_leds(){
+	[[ $(type gpio > /dev/null 2>&1) ]] && return
 	gpio mode $LED1 out
 	gpio mode $LED2 out
 	gpio mode $LED3 out
 	gpio mode $LED4 out
 	gpio mode $LED5 out
-}	
+}
 
 #USAGE: blink $LED5 &
 function blink_led(){
+	[[ $(type gpio > /dev/null 2>&1) ]] && return
 	gpio write $1 $ON > /dev/null 2>&1
 	sleep 0.09
 	gpio write $1 $OFF > /dev/null 2>&1
@@ -29,6 +31,7 @@ function blink_led(){
 }
 
 function trig_led(){
+	[[ $(type gpio > /dev/null 2>&1) ]] && return
 	[[ $(gpio read $1) -eq 1 ]] && STAT=0 || STAT=1
 	gpio write $1 $STAT > /dev/null 2>&1
 }
