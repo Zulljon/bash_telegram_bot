@@ -178,14 +178,16 @@ function file_size() {
 #}
 
 function get_Tlast_message(){
-	local LAST_MESSAGE_ID
+	local LAST_MESSAGE_ID CURL_opt
 	LAST_MESSAGE_ID="$(cat "${LMidFILE}")"
+	CURL_opt="-s --max-time 10 --output $RAM_JSON -X GET ${URL}/getUpdates?"
+	[[ "$TOR_EN" == "true" ]] && CURL_opt+=" --proxy socks4://127.0.0.1:9050"
 	# Based on this text from page https://core.telegram.org/bots/api
 	# The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
 	if [[ "$(date +%s)" -le "$(($(cat $LMdateFILE)+518400))" ]]; then # from last message plus 6 full days (6×24×60×60)
-		curl -s --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d offset="${LAST_MESSAGE_ID}" -d limit=1 2> /dev/null
+		curl $CURL_opt -d offset="${LAST_MESSAGE_ID}" -d limit=1 2> /dev/null
 	else
-		curl -s --max-time 10 --output "$RAM_JSON" -X GET "${URL}/getUpdates?" -d limit=1 2> /dev/null
+		curl $CURL_opt -d limit=1 2> /dev/null
 	fi
 	[[ MESS_DATE != 'null' && -n MESS_DATE ]] && MESS_DATE > "$LMdateFILE"
 }
@@ -244,15 +246,20 @@ function debug_info() {
 		echo -en "$SYMBOL_start"
 	done
 
-	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tGet updade from server"
-		cat $RAM_JSON
-	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tServer feedback on answer"
-		cat $SFB_JSON
-	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tsignal to die $(cat $SIG_to_DIE)"
-	echo -e "\n⛟⛟⛟\t$(date +%s) $(date)\tlast message id = $(cat $LMidFILE)"
+	echo -e "\n⛟⛟⛟\t[$(date +%s)] [$(date +"%F %T")]\tGet updade from server"
+		cat $RAM_JSON | jq
+	echo -e "\n⛟⛟⛟\t[$(date +%s)] [$(date +"%F %T")]\tServer feedback on answer"
+		cat $SFB_JSON | jq
+	echo -e "\n⛟⛟⛟\t[$(date +%s)] [$(date +"%F %T")]\tsignal to die $(cat $SIG_to_DIE)"
+	echo -e "\n⛟⛟⛟\t[$(date +%s)] [$(date +"%F %T")]\tlast message id = $(cat $LMidFILE)"
 
 # END
 	for (( i = 0; i < COLUMNSasd; i++ )); do
 		echo -en "$SYMBOL_end"
 	done
+}
+
+function tor_newnym() {
+	#cmd="signal NEWNYM" && ( echo "$cmd" && sleep 1 ) | socat - UNIX-CONNECT:/var/run/tor/control
+	cmd=$(echo -en "AUTHENTICATE \"password\"\nsignal newnym\nquit\n" | nc 127.0.0.1 9051)
 }

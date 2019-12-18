@@ -4,7 +4,14 @@
 
 DEBUG=false
 DEBUG_OUTPUT="false"
+TOR_EN="false"
 CURL_ARGS="-s --max-time 30 --output $SFB_JSON" # default "-s"
+[[ "$TOR_EN" == "true" ]] && CURL_ARGS+=" --proxy socks4://127.0.0.1:9050"
+TOKEN="$(cat ${CORE_DIR}/bot_token.txt)"
+URL="https://api.telegram.org/bot${TOKEN}"
+LMidFILE="${CORE_DIR}/last_message_id"
+LMdateFILE="${CORE_DIR}/last_message_date"
+DEST="/mnt/hard_drive1/zopiBot_trash"
 MAIN_MENU='[
 			["показать все функции","показать помощь"],
 			["включить котёл","выключить котёл"],
@@ -26,11 +33,7 @@ HELP_ru="Привет, этот бот для тестирования всяк�
 /speakru - голосовое сообщение русского текста (use festvox-ru from linux repo)
 /sayru - проиграть голосовое сообщение в динамиках"
 
-TOKEN="$(cat ${CORE_DIR}/bot_token.txt)"
-URL="https://api.telegram.org/bot${TOKEN}"
-LMidFILE="${CORE_DIR}/last_message_id"
-LMdateFILE="${CORE_DIR}/last_message_date"
-DEST="/mnt/hard_drive1/zopiBot_trash"
+
 
 if ! $DEBUG ; then
 #	TEMP_DIR=/run/user/1000/telegram_bot
