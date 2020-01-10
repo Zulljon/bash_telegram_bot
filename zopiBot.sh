@@ -16,8 +16,9 @@ if ! $DEBUG; then
 	echo "0" > "$SIG_to_DIE"
 	[[ $(uname -n) == "orangepizero" ]] && init_leds
 	while true; do
-		# get tor new nym 
-		if [[ $i -gt 10 ]];then
+		# get tor new nym
+		i=$((i+1))
+		if [[ $i -gt 10 && "$TOR_EN" == "true" ]];then
 			tor_newnym
 			i=0
 		fi
